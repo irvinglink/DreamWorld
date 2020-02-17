@@ -15,7 +15,6 @@ import static com.github.irvinglink.DreamWorld.Handlers.SpawnHandler.getSpawnLis
 public class DreamCommand implements CommandExecutor {
 
     private final MClass plugin;
-    private int end;
 
     public DreamCommand(MClass plugin) {
         this.plugin = plugin;
@@ -29,14 +28,14 @@ public class DreamCommand implements CommandExecutor {
 
         if (sender instanceof Player) {
 
-            Player player = (Player) sender;
-            DreamPlayer dreamPlayer = new DreamPlayer(player);
+            DreamPlayer dreamPlayer = new DreamPlayer((Player) sender);
 
-            if (player.hasPermission("RandomDreams.admin")) {
+            if (dreamPlayer.getPlayer().hasPermission("RandomDreams.admin")) {
                 if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
 
                     dreamPlayer.sendMessage("&7---===&8[&bDream&eWorld]&7===---");
                     dreamPlayer.sendMessage("&e/dreamworld &ahelp");
+                    dreamPlayer.sendMessage("&e/dreamworld &alist &b[&e#&b]");
                     dreamPlayer.sendMessage("&e/dreamworld &aworld set &c<world>");
                     dreamPlayer.sendMessage("&e/dreamworld &aworld delete &c<world>");
                     dreamPlayer.sendMessage("&e/dreamworld &aworld teleport &c<world>");
@@ -61,12 +60,12 @@ public class DreamCommand implements CommandExecutor {
                                 dreamPlayer.sendMessage("&7 -=&bDream&eWorlds&7=-");
 
                             } catch (NumberFormatException ignored) {
-                                dreamPlayer.sendMessage(plugin.getCommonUse().Chat("&cYou can only use numbers.", true));
+                                dreamPlayer.sendMessage("&cYou can only use numbers&7.", true);
                             }
                         }
 
                     } else {
-                        dreamPlayer.sendMessage(plugin.getCommonUse().Chat("&cThere are no worlds registered.", true));
+                        dreamPlayer.sendMessage("&cThere are no worlds registered&7.", true);
                     }
 
                     return true;
@@ -74,7 +73,7 @@ public class DreamCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("world")) {
 
                     if (args.length == 1) {
-                        player.sendMessage(plugin.getCommonUse().Chat("&7Use &bset&7/&bdelete&7/&bteleport", true));
+                        dreamPlayer.sendMessage("&7Use &bset&7/&bdelete&7/&bteleport&7.", true);
                         return true;
                     }
 
@@ -82,9 +81,11 @@ public class DreamCommand implements CommandExecutor {
 
                         String world = args[2];
 
-                        handler.createSpawn(world, dreamPlayer.getLocation());
+                        if (!handler.existSpawn(world)){
+                            handler.createSpawn(world, dreamPlayer.getLocation());
+                            dreamPlayer.sendMessage("&7World &a" + world + " &7registered successfully!", true);
+                        } else dreamPlayer.sendMessage("&cThat world already exists!", true);
 
-                        dreamPlayer.sendMessage(plugin.getCommonUse().Chat("&7World &a" + world + " &7registered successfully!", true));
                         return true;
 
                     }
@@ -93,43 +94,45 @@ public class DreamCommand implements CommandExecutor {
 
                         String world = args[2];
 
-                        handler.deleteSpawn(world);
-
-
-                        dreamPlayer.sendMessage(plugin.getCommonUse().Chat("&cWorld &b" + world + " &chas been deleted!", true));
+                        if (handler.existSpawn(world)){
+                            handler.deleteSpawn(world);
+                            dreamPlayer.sendMessage("&cWorld &b" + world + " &chas been deleted!", true);
+                        } else dreamPlayer.sendMessage("&cThat world does not exists&7.", true);
                         return true;
                     }
                     if (args[1].equalsIgnoreCase("teleport") && args.length == 3) {
 
                         String world = args[2];
-
                         Spawn spawn = handler.getSpawn(world);
 
                         dreamPlayer.teleport(spawn);
-
-                        player.sendMessage(plugin.getCommonUse().Chat("&aMoving to another world!", true));
+                        dreamPlayer.sendMessage("&aMoving to another world!", true);
                         return true;
 
                     }
                     if (args[1].equalsIgnoreCase("settings") && args.length == 3) {
 
-                        player.openInventory(new SettingsMenu(plugin).getInventory());
+                        String world = args[2];
+                        SettingsMenu settingsMenu = new SettingsMenu(plugin);
+
+                        settingsMenu.setWorldName(world);
+                        dreamPlayer.getPlayer().openInventory(new SettingsMenu(plugin).getInventory());
 
                     } else {
 
-                        player.sendMessage(plugin.getCommonUse().Chat("That command does not exists. Use &b/dreamworld help&7.", true));
+                        dreamPlayer.sendMessage("&cThat command does not exists&7.&c Use &b/dreamworld help&7.", true);
                         return true;
 
                     }
                 } else {
 
-                    dreamPlayer.sendMessage(plugin.getCommonUse().Chat("That command does not exists. Use &b/dreamworld help&7.", true));
+                    dreamPlayer.sendMessage("&cThat command does not exists&7.&c Use &b/dreamworld help&7.", true);
                     return true;
 
                 }
             } else {
 
-                dreamPlayer.sendMessage(plugin.getCommonUse().Chat("You do not have permission to do this.", true));
+                dreamPlayer.sendMessage("&cYou do not have permission to do this&7.", true);
                 return true;
 
             }

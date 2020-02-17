@@ -17,7 +17,7 @@ public class SpawnHandler {
 
     public Spawn getSpawn(String name) {
         if (!(plugin.getSpawnFile().contains("Worlds." + name))) return null;
-        return new Spawn(name, (Location) plugin.getSpawnFile().get("Worlds." + name));
+        return new Spawn(name, (Location) plugin.getSpawnFile().get("Worlds." + name + ".Location"));
     }
 
     public Spawn randomSpawn() {
@@ -33,7 +33,7 @@ public class SpawnHandler {
 
     public void createSpawn(String name, Location location) {
 
-        plugin.getSpawnFile().set("Worlds." + name, location);
+        plugin.getSpawnFile().set("Worlds." + name + ".Location", location);
 
         if (!getSpawnList().contains(getSpawn(name))) getSpawnList().add(new Spawn(name, location));
 
@@ -47,6 +47,10 @@ public class SpawnHandler {
         if (!getSpawnList().contains(getSpawn(name))) getSpawnList().remove(getSpawn(name));
 
         plugin.saveConfig();
+    }
+
+    public boolean existSpawn(String name){
+        return plugin.getSpawnFile().contains("Worlds." + name);
     }
 
     public static List<Spawn> getSpawnList() {
