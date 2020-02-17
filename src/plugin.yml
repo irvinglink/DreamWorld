@@ -1,0 +1,8 @@
+main: com.github.irvinglink.DreamWorld.MClass
+name: DreamWorld
+version: 1.0
+commands:
+  dreamworld:
+    description: Dreamworld main command.
+    aliases:
+      - dw
