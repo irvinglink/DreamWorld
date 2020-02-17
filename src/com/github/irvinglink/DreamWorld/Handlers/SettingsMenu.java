@@ -10,26 +10,28 @@ import org.bukkit.inventory.InventoryHolder;
 public class SettingsMenu implements InventoryHolder {
 
     private final MClass plugin;
-    private String worldName;
+    private static String worldName;
 
-    public SettingsMenu(MClass plugin){
+    public SettingsMenu(MClass plugin) {
         this.plugin = plugin;
     }
 
-    public void  setWorldName(String name){
-        this.worldName = name;
+    public void setWorldName(String worldName) {
+        this.worldName = worldName;
     }
 
-    public String getWorldName(){
-        return this.worldName;
+    public String getWorldName() {
+        return worldName;
     }
 
     @Override
-    public Inventory getInventory(){
+    public Inventory getInventory() {
+
+        System.out.println(worldName);
 
         CommonUse commonUse = plugin.getCommonUse();
         Inventory menu = Bukkit.createInventory(new SettingsMenu(plugin), InventoryType.CHEST,
-                commonUse.Chat("&b&lWorld &e&lSettings &7&l: &a&l"+getWorldName()));
+                commonUse.Chat("&b&lWorld &e&lSettings &7&l: &a&l" + getWorldName()));
 
 
         return menu;

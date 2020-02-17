@@ -113,10 +113,15 @@ public class DreamCommand implements CommandExecutor {
                     if (args[1].equalsIgnoreCase("settings") && args.length == 3) {
 
                         String world = args[2];
-                        SettingsMenu settingsMenu = new SettingsMenu(plugin);
 
-                        settingsMenu.setWorldName(world);
-                        dreamPlayer.getPlayer().openInventory(new SettingsMenu(plugin).getInventory());
+                        if (handler.existSpawn(world)){
+
+                            SettingsMenu settingsMenu = new SettingsMenu(plugin);
+
+                            settingsMenu.setWorldName(world);
+                            dreamPlayer.getPlayer().openInventory(new SettingsMenu(plugin).getInventory());
+
+                        } else  dreamPlayer.sendMessage("&cThat world does not exists&7.", true);
 
                     } else {
 
