@@ -57,7 +57,6 @@ public class DreamCommand implements CommandExecutor {
                                 int page = Integer.parseInt(args[1]);
 
 
-
                                 dreamPlayer.sendMessage("&7 -=&bDream&eWorlds&7=-");
 
                             } catch (NumberFormatException ignored) {
@@ -109,6 +108,9 @@ public class DreamCommand implements CommandExecutor {
 
                         player.sendMessage(plugin.getCommonUse().Chat("&aMoving to another world!", true));
                         return true;
+
+                    }
+                    if (args[1].equalsIgnoreCase("settings") && args.length == 3) {
 
                     } else {
 
