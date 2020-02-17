@@ -1,6 +1,7 @@
 package com.github.irvinglink.DreamWorld.Commands;
 
 import com.github.irvinglink.DreamWorld.Handlers.DreamPlayer;
+import com.github.irvinglink.DreamWorld.Handlers.SettingsMenu;
 import com.github.irvinglink.DreamWorld.Handlers.Spawn;
 import com.github.irvinglink.DreamWorld.Handlers.SpawnHandler;
 import com.github.irvinglink.DreamWorld.MClass;
@@ -111,6 +112,8 @@ public class DreamCommand implements CommandExecutor {
 
                     }
                     if (args[1].equalsIgnoreCase("settings") && args.length == 3) {
+
+                        player.openInventory(new SettingsMenu(plugin).getInventory());
 
                     } else {
 
